@@ -10,6 +10,7 @@ using the specified commit hash below 👇
 1. Starting point
 2. Apply the Command design pattern
 3. Replace Command with CommandHandler
+4. Command pattern for query actions
 
 ```bash
 # step 1
