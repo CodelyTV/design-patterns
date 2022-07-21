@@ -29,7 +29,7 @@
 * <a href="https://pro.codely.com/library/patrones-de-diseno-creacionales-167860"> 🏭 Creational Design Patterns course</a>
 * <a href="https://pro.codely.com/library/patrones-de-diseno-de-comportamiento"> 🐝 Behavioral Design Patterns course</a>
 
-## 💩 Design pattern
+## 🪵 Design pattern
 
 👷‍ Work in progress
 
