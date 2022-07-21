@@ -8,7 +8,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 @Service
-public class CreateCourseCommandHandler extends CommandHandler<CreateCourseCommand> {
+public class CreateCourseCommandHandler extends CommandHandler<CreateCourseCommand, Void> {
     private final CourseCreator courseCreator;
 
     public CreateCourseCommandHandler(CourseCreator courseCreator) {
@@ -22,11 +22,12 @@ public class CreateCourseCommandHandler extends CommandHandler<CreateCourseComma
     }
 
     @Override
-    protected void run(CreateCourseCommand command) {
+    protected Void run(CreateCourseCommand command) {
         courseCreator.create(
             command.id(),
             command.name(),
             command.duration()
         );
+        return null;
     }
 }
