@@ -14,4 +14,7 @@ using the specified commit hash below 👇
 ```bash
 # step 1
 git checkout 473e7160
+
+# step 2
+git checkout 20f84858
 ```
