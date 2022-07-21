@@ -19,14 +19,6 @@ In this example we apply the Command design pattern as an
 abstraction to communicate the Controllers with the
 corresponding use case.
 
-## Steps
-
-To navigate between steps use `git checkout` command
-using the specified commit hash below 👇
-
-1. Starting point (hash)
-2. Apply command pattern (hash)
-
 ## Languages
 
 - [Java](java)
