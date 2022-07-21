@@ -2,22 +2,21 @@ package tv.codely.mooc.api.Ui.Api.Controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import tv.codely.mooc.api.Domain.Course;
-import tv.codely.mooc.api.Domain.CourseRepository;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import tv.codely.mooc.api.Application.Create.CreateCourseCommand;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 @RestController
 public class CoursesPutController {
-    private final CourseRepository repository;
+    private final CreateCourseCommand command;
 
-    CoursesPutController(CourseRepository repository) {
-        this.repository = repository;
+    public CoursesPutController(CreateCourseCommand command) {
+        this.command = command;
     }
 
     @PutMapping(value = "/courses/{id}")
@@ -25,9 +24,8 @@ public class CoursesPutController {
         @PathVariable String id,
         @RequestBody CoursePutControllerRequestBody body
     ) {
-        var course = new Course(id, body.name(), body.duration());
-        repository.save(course);
-        Logger.getAnonymousLogger().log(new LogRecord(Level.INFO, "Course created: " + id));
+        command.setParams(id, body.name(), body.duration());
+        command.execute();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new HashMap<>());
     }
