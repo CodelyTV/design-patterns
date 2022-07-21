@@ -17,4 +17,7 @@ git checkout 473e7160
 
 # step 2
 git checkout 20f84858
+
+# step 3
+git checkout d37f2bc8
 ```
