@@ -7,16 +7,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import tv.codely.mooc.api.Application.Create.CreateCourseCommand;
+import tv.codely.mooc.api.Application.Create.CreateCourseCommandHandler;
 
 import java.io.Serializable;
 import java.util.HashMap;
 
 @RestController
 public class CoursesPutController {
-    private final CreateCourseCommand command;
+    private final CreateCourseCommandHandler commandHandler;
 
-    public CoursesPutController(CreateCourseCommand command) {
-        this.command = command;
+    public CoursesPutController(CreateCourseCommandHandler commandHandler) {
+        this.commandHandler = commandHandler;
     }
 
     @PutMapping(value = "/courses/{id}")
@@ -24,10 +25,10 @@ public class CoursesPutController {
         @PathVariable String id,
         @RequestBody CoursePutControllerRequestBody body
     ) {
-        command.setParams(id, body.name(), body.duration());
-        command.execute();
+        var command = new CreateCourseCommand(id, body.name(), body.duration());
+        commandHandler.execute(command);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new HashMap<>());
     }
-}
+ }
 
