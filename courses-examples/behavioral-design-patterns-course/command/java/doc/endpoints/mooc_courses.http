@@ -1,0 +1,12 @@
+### Create a course
+PUT localhost:8080/courses/6854aaba-0ded-4837-bf18-cae3caad45ed
+Content-Type: application/json
+
+{
+  "name": "Patrones de Diseño",
+  "duration": "2 horas"
+}
+
+### Find a course
+GET localhost:8080/courses/6854aaba-0ded-4837-bf18-cae3caad45ed
+
