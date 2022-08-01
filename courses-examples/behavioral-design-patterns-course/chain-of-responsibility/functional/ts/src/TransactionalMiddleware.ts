@@ -1,8 +1,7 @@
 import { Command } from "./Command";
+import { Middleware } from "./Middleware";
 
-export function functionalTransactionalMiddleware(
-  next: (command: Command) => void
-): (command: Command) => void {
+export function functionalTransactionalMiddleware(next: Middleware): Middleware {
   return function (command: Command): void {
     try {
       next(command);
