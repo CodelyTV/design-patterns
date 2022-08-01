@@ -1,15 +1,14 @@
 import { Command } from "./Command";
-import { Middleware } from "./Middleware";
 
-export class TransactionalMiddleware implements Middleware {
-  constructor(private readonly next: Middleware) {}
-
-  handle(command: Command): void {
+export function functionalTransactionalMiddleware(
+  next: (command: Command) => void
+): (command: Command) => void {
+  return function (command: Command): void {
     try {
-      this.next.handle(command);
+      next(command);
     } catch (error: unknown) {
       // Rollback
       throw error;
     }
-  }
+  };
 }

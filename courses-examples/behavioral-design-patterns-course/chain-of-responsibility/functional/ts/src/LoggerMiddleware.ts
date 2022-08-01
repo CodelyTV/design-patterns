@@ -1,12 +1,11 @@
 import { Command } from "./Command";
-import { Middleware } from "./Middleware";
 
-export class LoggerMiddleware implements Middleware {
-  constructor(private readonly next: Middleware) {}
-
-  handle(command: Command): void {
+export function functionalLoggerMiddleware(
+  next: (command: Command) => void
+): (command: Command) => void {
+  return function (command: Command): void {
     console.log(`Ejecutando ${command.constructor.name}`);
 
-    this.next.handle(command);
-  }
+    next(command);
+  };
 }
