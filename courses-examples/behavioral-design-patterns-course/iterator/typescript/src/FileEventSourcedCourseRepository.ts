@@ -1,9 +1,10 @@
 import fs from "fs";
+import * as readline from "readline";
 
 import { Course } from "./Course";
 import { CourseRepository } from "./CourseRepository";
 import { CourseReviews } from "./CourseReviews";
-import { Stars } from "./Stars";
+import { ReviewAdded } from "./ReviewAdded";
 
 export class FileEventSourcedCourseRepository implements CourseRepository {
   find(id: string): Course {
@@ -37,6 +38,19 @@ export class FileEventSourcedCourseRepository implements CourseRepository {
     const path = `events-${id}.txt`;
     if (fs.existsSync(path)) {
       fs.unlinkSync(path);
+    }
+  }
+
+  async *stream(id: string): AsyncIterableIterator<ReviewAdded> {
+    const path = `events-${id}.txt`;
+    const readInterface = readline.createInterface(fs.createReadStream(path));
+
+    for await (const line of readInterface) {
+      if (line.trim() === "") {
+        continue;
+      }
+
+      yield JSON.parse(line);
     }
   }
 }

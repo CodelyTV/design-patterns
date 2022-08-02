@@ -1,7 +1,6 @@
 import { AggregateRoot } from "./AggregateRoot";
 import { CourseReview } from "./CourseReview";
 import { CourseReviews } from "./CourseReviews";
-import { CourseReviewSnapshot } from "./CourseReviewsSnapshot";
 import { CourseSnapshot } from "./CourseSnapshot";
 import { ReviewAdded } from "./ReviewAdded";
 import { Stars } from "./Stars";

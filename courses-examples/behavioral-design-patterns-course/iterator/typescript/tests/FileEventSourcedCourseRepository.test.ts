@@ -24,4 +24,22 @@ describe("Event Sourced should", () => {
 
     expect(foundCourse).toMatchObject(course);
   });
+
+  it("streams events", async () => {
+    const course = new Course("id", new CourseReviews([]));
+    course.addReview(new Stars(1));
+    course.addReview(new Stars(2));
+    course.addReview(new Stars(3));
+    course.addReview(new Stars(4));
+    course.addReview(new Stars(5));
+
+    repository.save(course);
+
+    for await (const event of repository.stream("id")) {
+      console.log(event);
+      if (event.stars === 3) {
+        break;
+      }
+    }
+  });
 });
