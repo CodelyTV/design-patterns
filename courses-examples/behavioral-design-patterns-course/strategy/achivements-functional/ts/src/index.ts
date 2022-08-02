@@ -1,15 +1,42 @@
-import { AchivementDealer } from "./AchivementDealer";
-import { BackendGuruAchivement } from "./BackendGuruAchivement";
-import { FrontendGuruAchivement } from "./FrontendGuruAchivement";
-import { FullstackGuruAchivement } from "./FullstackGuruAchivement";
-
 const learnerId = "36596ac0-ebe9-4bc0-a067-f0e4fb229dc0";
-const dealer = new AchivementDealer(new BackendGuruAchivement());
 
-dealer.dealAchievements(learnerId, 100);
+const backendGuruAchievement = (
+  learnerId: string,
+  earnedPoints: number
+): void => {
+  if (earnedPoints > 200) {
+    throw Error(learnerId);
+  }
+};
 
-dealer.changeStrategy(new FrontendGuruAchivement());
-dealer.dealAchievements(learnerId, 200);
+const frontendGuruAchievement = (
+  learnerId: string,
+  earnedPoints: number
+): void => {
+  if (earnedPoints > 200) {
+    throw Error(learnerId);
+  }
+};
 
-dealer.changeStrategy(new FullstackGuruAchivement());
-dealer.dealAchievements(learnerId, 300);
+const fullstackGuruAchievement = (
+  learnerId: string,
+  earnedPoints: number
+): void => {
+  if (earnedPoints > 200) {
+    throw Error(learnerId);
+  }
+};
+
+function achievementChecker(
+  checker: (learnerId: string, earnedPoints: number) => void,
+  learnerId: string,
+  earnedPoints: number
+) {
+  checker(learnerId, earnedPoints);
+}
+
+achievementChecker(backendGuruAchievement, learnerId, 100);
+
+achievementChecker(frontendGuruAchievement, learnerId, 200);
+
+achievementChecker(fullstackGuruAchievement, learnerId, 300);
