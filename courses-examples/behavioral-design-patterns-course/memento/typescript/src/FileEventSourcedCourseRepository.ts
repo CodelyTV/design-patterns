@@ -7,6 +7,7 @@ import { Stars } from "./Stars";
 
 export class FileEventSourcedCourseRepository implements CourseRepository {
   find(id: string): Course {
+    // TODO: Optimize reads
     const events = fs
       .readFileSync(`events-${id}.txt`, { flag: "r" })
       .toString()

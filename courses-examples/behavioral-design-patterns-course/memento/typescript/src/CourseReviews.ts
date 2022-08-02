@@ -1,4 +1,5 @@
 import { CourseReview } from "./CourseReview";
+import { CourseReviewsSnapshot } from "./CourseReviewsSnapshot";
 import { Stars } from "./Stars";
 
 export class CourseReviews {
@@ -15,5 +16,13 @@ export class CourseReviews {
 
   add(stars: Stars) {
     this.reviews.push(new CourseReview(stars));
+  }
+
+  createSnapshot(): CourseReviewsSnapshot {
+    return {
+      reviews: this.reviews.map((review) => {
+        return { stars: review.stars.value };
+      }),
+    };
   }
 }
