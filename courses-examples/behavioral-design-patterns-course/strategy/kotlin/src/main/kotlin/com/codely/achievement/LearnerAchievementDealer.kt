@@ -1,42 +1,16 @@
 package com.codely.achievement
 
-import java.util.*
+import com.codely.achievement.achievements.*
 
-class LearnerAchievementDealer(
+class LearnerAchievementDealer (
     private val learnerAchievements: LearnerAchievementRepository
-) {
-    fun dealAchievements(learnerId: String, earnedPoints: LearnerEarnedPoints) {
-        if (earnedPoints.total >= EarnedPoints(100)) {
-            dealAchievement(learnerId, AchievementType.PointsEarned100)
-        }
-        if (earnedPoints.total >= EarnedPoints(500)) {
-            dealAchievement(learnerId, AchievementType.PointsEarned500)
-        }
-        if (earnedPoints.total >= EarnedPoints(2500)) {
-            dealAchievement(learnerId, AchievementType.PointsEarned2500)
-        }
-
-        if (earnedPoints.frontend >= EarnedPoints(2000)) {
-            dealAchievement(learnerId, AchievementType.FrontendGuru)
-        }
-        if (earnedPoints.backend >= EarnedPoints(3000)) {
-            dealAchievement(learnerId, AchievementType.BackendGuru)
-        }
-        if (earnedPoints.frontend >= EarnedPoints(1500) &&
-            earnedPoints.backend >= EarnedPoints(1750)
-        ) {
-            dealAchievement(learnerId, AchievementType.FullStackGuru)
-        }
-    }
-
-    private fun dealAchievement(learnerId: String, type: AchievementType) {
-        val achievement = LearnerAchievement(
-            "id",
-            learnerId,
-            type,
-            Date()
-        )
-        learnerAchievements.save(achievement)
-        println(type.description())
+) : AchievementDealer(learnerAchievements) {
+    override fun dealAchievements(learnerId: String, earnedPoints: LearnerEarnedPoints) {
+        PointsEarned100(learnerAchievements).dealAchievements(learnerId, earnedPoints)
+        PointsEarned500(learnerAchievements).dealAchievements(learnerId, earnedPoints)
+        PointsEarned2500(learnerAchievements).dealAchievements(learnerId, earnedPoints)
+        FrontendGuru(learnerAchievements).dealAchievements(learnerId, earnedPoints)
+        BackendGuru(learnerAchievements).dealAchievements(learnerId, earnedPoints)
+        FullStackGuru(learnerAchievements).dealAchievements(learnerId, earnedPoints)
     }
 }

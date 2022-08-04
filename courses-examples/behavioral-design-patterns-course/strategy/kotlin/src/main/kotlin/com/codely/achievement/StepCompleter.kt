@@ -6,7 +6,7 @@ class StepCompleter(
     private val learners: LearnerRepository,
     private val steps: StepRepository,
     private val learnerSteps: LearnerStepRepository,
-    private val learnerAchievementDealer: LearnerAchievementDealer
+    private val learnerAchievementDealer: AchievementDealer
     ) {
 
     fun completeStep(stepId: String, learnerId: String) {
