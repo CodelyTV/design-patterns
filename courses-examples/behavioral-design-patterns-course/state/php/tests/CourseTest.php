@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace CodelyTv\Tests;
 
+use CodelyTv\ArchiveCourse;
 use CodelyTv\Course;
 use CodelyTv\CourseDuration;
 use CodelyTv\CourseId;
 use CodelyTv\CourseName;
 use CodelyTv\CourseStatus;
+use CodelyTv\DraftCourse;
+use CodelyTv\PublishedCourse;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +23,7 @@ final class CourseTest extends TestCase
      */
     public function itShouldRenameADraftCourse(): void
     {
-        $course = Course::draft(
+        $course = new DraftCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
@@ -28,7 +31,7 @@ final class CourseTest extends TestCase
 
         $course->rename(new CourseName("Hexagonal Architecture"));
 
-        self::assertEquals("Hexagonal Architecture", $course->name());
+        self::assertEquals("Hexagonal Architecture", $course->name()->value());
     }
 
     /**
@@ -38,7 +41,7 @@ final class CourseTest extends TestCase
     public function itShouldThrowAnErrorWhenTryingToPublishADraftCourseWithALongName(): void
     {
         $tooLongName = "Too long course nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-        $course = Course::draft(
+        $course = new DraftCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName($tooLongName),
             new CourseDuration("3 hours"),
@@ -55,15 +58,15 @@ final class CourseTest extends TestCase
      */
     public function itShouldPublishADraftCourse(): void
     {
-        $course = Course::draft(
+        $course = new DraftCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
         );
 
-        $course->publish();
+        $publishedCourse = $course->publish();
 
-        self::assertTrue($course->status()->is(CourseStatus::published()));
+        self::assertTrue($publishedCourse->status()->is(CourseStatus::published()));
     }
 
     /**
@@ -72,15 +75,15 @@ final class CourseTest extends TestCase
      */
     public function itShouldArchiveADraftCourse(): void
     {
-        $course = Course::draft(
+        $course = new DraftCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
         );
 
-        $course->archive();
+        $archivedCourse = $course->archive();
 
-        self::assertTrue($course->status()->is(CourseStatus::archived()));
+        self::assertTrue($archivedCourse->status()->is(CourseStatus::archived()));
     }
 
     /**
@@ -89,11 +92,10 @@ final class CourseTest extends TestCase
      */
     public function itShouldRenameAPublishedCourse(): void
     {
-        $course = new Course(
+        $course = new PublishedCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
-            new CourseDuration("3 hours"),
-            CourseStatus::published(),
+            new CourseDuration("3 hours")
         );
 
         $course->rename(new CourseName("Hexagonal Architecture"));
@@ -108,11 +110,10 @@ final class CourseTest extends TestCase
      */
     public function itShouldThrowAnErrorWhenTryingToRenameALongNameForAPublishedCourse(): void
     {
-        $course = new Course(
+        $course = new PublishedCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
-            CourseStatus::published(),
         );
 
         $this->expectExceptionMessage('Title too long');
@@ -127,11 +128,10 @@ final class CourseTest extends TestCase
      */
     public function itShouldThrowAnErrorWhenTryingToPublishAPublishedCourse(): void
     {
-        $course = new Course(
+        $course = new PublishedCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
-            CourseStatus::published(),
         );
 
         $this->expectExceptionMessage('Invalid operation');
@@ -145,16 +145,15 @@ final class CourseTest extends TestCase
      */
     public function itShouldArchiveAPublishedCourse(): void
     {
-        $course = new Course(
+        $course = new PublishedCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
-            CourseStatus::published(),
         );
 
-        $course->archive();
+        $archivedCourse = $course->archive();
 
-        self::assertTrue($course->status()->is(CourseStatus::archived()));
+        self::assertTrue($archivedCourse->status()->is(CourseStatus::archived()));
     }
 
     /**
@@ -163,11 +162,10 @@ final class CourseTest extends TestCase
      */
     public function itShouldThrowAnErrorWhenTryingToRenameAArchivedCourse(): void
     {
-        $course = new Course(
+        $course = new ArchiveCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
-            CourseStatus::archived(),
         );
 
         $this->expectExceptionMessage('Invalid operation');
@@ -181,11 +179,10 @@ final class CourseTest extends TestCase
      */
     public function itShouldThrowAnErrorWhenTryingToPublishAArchivedCourse(): void
     {
-        $course = new Course(
+        $course = new ArchiveCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
-            CourseStatus::archived(),
         );
 
         $this->expectExceptionMessage('Invalid operation');
@@ -199,15 +196,14 @@ final class CourseTest extends TestCase
      */
     public function itShouldArchiveAnArchivedCourse(): void
     {
-        $course = new Course(
+        $course = new ArchiveCourse(
             new CourseId("26f8d989-4e27-48e2-a346-14b8611de15f"),
             new CourseName("Arquitectura Hexagonal"),
             new CourseDuration("3 hours"),
-            CourseStatus::archived(),
         );
 
-        $course->archive();
+        $archivedCourse = $course->archive();
 
-        self::assertTrue($course->status()->is(CourseStatus::archived()));
+        self::assertTrue($archivedCourse->status()->is(CourseStatus::archived()));
     }
 }

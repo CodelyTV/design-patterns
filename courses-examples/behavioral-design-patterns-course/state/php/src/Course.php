@@ -6,25 +6,15 @@ namespace CodelyTv;
 
 use Exception;
 
-final class Course
+abstract class Course
 {
-    private CourseState $courseState;
+    protected CourseStatus $status;
 
     public function __construct(
-        private readonly CourseId $id,
-        private CourseName $name,
-        private readonly CourseDuration $duration,
-        private CourseStatus $status
+        protected readonly CourseId $id,
+        protected CourseName $name,
+        protected readonly CourseDuration $duration,
     ) {
-        $this->courseState = $this->status->toCourseState();
-    }
-
-    public static function draft(
-        CourseId $id,
-        CourseName $name,
-        CourseDuration $duration
-    ): Course {
-        return new self($id, $name, $duration, CourseStatus::draft());
     }
 
     public function id(): CourseId
@@ -50,21 +40,16 @@ final class Course
     /** @throws Exception */
     public function rename(CourseName $newName): void
     {
-        $this->courseState->ensureIsAbleToRename($newName);
+        $this->ensureCanRename($newName);
         $this->name = $newName;
     }
 
     /** @throws Exception */
-    public function publish(): void
-    {
-        $this->courseState->ensureIsAbleToPublish($this);
-        $this->status = CourseStatus::published();
-    }
+    abstract protected function ensureCanRename(CourseName $newName): void;
 
     /** @throws Exception */
-    public function archive(): void
-    {
-        $this->courseState->ensureIsAbleToArchive();
-        $this->status = CourseStatus::archived();
-    }
+    abstract public function publish(): PublishedCourse;
+
+    /** @throws Exception */
+    abstract public function archive(): ArchiveCourse;
 }
