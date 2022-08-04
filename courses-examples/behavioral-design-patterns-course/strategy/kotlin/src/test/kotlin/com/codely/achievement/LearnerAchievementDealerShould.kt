@@ -1,11 +1,13 @@
 package com.codely.achievement
 
+import com.codely.achievement.factories.LearnerAchievementDealerFactory
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
 class LearnerAchievementDealerShould {
     private val userAchievements = InMemoryLearnerAchievementRepository()
-    private val learnerAchievementDealer = LearnerAchievementDealer(userAchievements)
+    private val dealersFactory = LearnerAchievementDealerFactory(userAchievements)
+    private val learnerAchievementDealer = LearnerAchievementDealer(userAchievements, dealersFactory)
 
     @Test
     fun `deal 100 points achievement`() {

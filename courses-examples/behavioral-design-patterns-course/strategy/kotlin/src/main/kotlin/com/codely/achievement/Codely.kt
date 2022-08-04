@@ -1,5 +1,7 @@
 package com.codely.achievement
 
+import com.codely.achievement.factories.LearnerAchievementDealerFactory
+
 fun main(args: Array<String>) {
 
     val earnedPoints = LearnerEarnedPoints(
@@ -9,7 +11,9 @@ fun main(args: Array<String>) {
     val learnerId = "learnerId"
     val learner = Learner(learnerId, earnedPoints)
 
-    val learnerAchievementDealer = LearnerAchievementDealer(InMemoryLearnerAchievementRepository())
+    val learnerAchievements = InMemoryLearnerAchievementRepository()
+    val dealersFactory = LearnerAchievementDealerFactory(learnerAchievements)
+    val learnerAchievementDealer = LearnerAchievementDealer(learnerAchievements, dealersFactory)
 
     val stepCompleter = StepCompleter(
         ConstantLearnerRepository(learner),
