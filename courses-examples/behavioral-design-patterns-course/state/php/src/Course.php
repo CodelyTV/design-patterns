@@ -8,19 +8,22 @@ use Exception;
 
 final class Course
 {
+    private CourseState $courseState;
+
     public function __construct(
         private readonly CourseId $id,
         private CourseName $name,
         private readonly CourseDuration $duration,
         private CourseStatus $status
     ) {
+        $this->courseState = $this->status->toCourseState();
     }
 
     public static function draft(
         CourseId $id,
         CourseName $name,
-        CourseDuration $duration)
-    {
+        CourseDuration $duration
+    ): Course {
         return new self($id, $name, $duration, CourseStatus::draft());
     }
 
@@ -47,45 +50,21 @@ final class Course
     /** @throws Exception */
     public function rename(CourseName $newName): void
     {
-        if ($this->status->is(CourseStatus::archived())) {
-            throw new Exception('Invalid operation');
-        }
-
-        if ($this->status->is(CourseStatus::published())) {
-            if (strlen($newName->value()) > 100) {
-                throw new Exception('Title too long');
-            }
-        }
-
+        $this->courseState->ensureIsAbleToRename($newName);
         $this->name = $newName;
     }
 
     /** @throws Exception */
     public function publish(): void
     {
-        if ($this->status->isNot(CourseStatus::draft())) {
-            throw new Exception('Invalid operation');
-        }
-
-        if (strlen($this->name->value()) > 100) {
-            throw new Exception('Title too long');
-        }
-
+        $this->courseState->ensureIsAbleToPublish($this);
         $this->status = CourseStatus::published();
     }
 
     /** @throws Exception */
     public function archive(): void
     {
-        if ($this->status->is(CourseStatus::published())) {
-            $this->notifyLearners();
-        }
-
+        $this->courseState->ensureIsAbleToArchive();
         $this->status = CourseStatus::archived();
-    }
-
-    private function notifyLearners(): void
-    {
-        // Not implemented
     }
 }
