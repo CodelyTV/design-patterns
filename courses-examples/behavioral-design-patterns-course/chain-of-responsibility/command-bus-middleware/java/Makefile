@@ -3,7 +3,7 @@ all: build
 
 .PHONY: up
 up:
-	@docker-compose up -d
+	@docker compose up -d
 
 .PHONY: build
 build:
